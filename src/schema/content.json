@@ -1,0 +1,22 @@
+{
+	"article": {
+		"name": "string",
+		"updatedAt": "date",
+		"createdAt": "date",
+		"author": "string",
+		"content": "string"
+	},
+	"comment": {
+		"articleId": "string",
+		"content": "string",
+		"author": "string",
+		"createdAt": "date"
+	},
+	"user": {
+		"username": "string",
+		"password": "string",
+		"email": "string",
+		"createdAt": "date",
+		"updatedAt": "date"
+	}
+}

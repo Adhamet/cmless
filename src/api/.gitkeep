@@ -1,0 +1,65 @@
+# API response
+{
+	"data": [
+		{
+			"name": "c++",
+			"updatedAt": "date",
+			"createdAt": "date",
+			"author": "ahmed saed",
+			"content": "c++ is awesome"
+		},
+		{
+			"name": "c++",
+			"updatedAt": "date",
+			"createdAt": "date",
+			"author": "ahmed saed",
+			"content": "c++ is awesome"
+		}
+	],
+	"meta": {
+		"total": 2,
+		"page": 1,
+		"limit": 10
+	}
+}
+
+# console
+create article(name: string, content: string, author: string)
+create user(name: string, email: string, password: string)
+create comment(content: string, article_id: int, user_id: int)
+
+insert article(name: "c++", content: "c++ is awesome", author: "ahmed saed")
+update article(id: 1, name: "c++", content: "c++ is awesome", author: "ahmed saed")
+delete article(id: 1)
+
+
+# Clndr
+create event(title: string, start: date, end: date, votes: int, user_id: int)
+create user(name: string, email: string, password: string)
+create attendee(event_id: int, user_id: int)
+
+insert event(title: "event", start: "2020-01-01", end: "2020-01-01", votes: 0, user_id: 1)
+insert user(name: "ahmed saed", email: "mail@ahmedsaed.me", password: "asdasd")
+insert attendee(event_id: 1, user_id: 1)
+
+API
+GET /event -> {
+	"data": [
+		{
+			"title": "event",
+			"start": "2020-01-01",
+			"end": "2020-01-01",
+			"votes": 0,
+			"userID": 0
+		}
+	]
+}
+
+GET /user -> {
+	"data": [
+		{
+			"name": "ahmed saed",
+			"email": "adsasd"
+		}
+	]
+}
