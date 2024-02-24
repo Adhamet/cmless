@@ -1,22 +1,14 @@
 {
-	"article": {
-		"name": "string",
-		"updatedAt": "date",
-		"createdAt": "date",
-		"author": "string",
-		"content": "string"
-	},
-	"comment": {
-		"articleId": "string",
-		"content": "string",
-		"author": "string",
-		"createdAt": "date"
-	},
-	"user": {
-		"username": "string",
-		"password": "string",
-		"email": "string",
-		"createdAt": "date",
-		"updatedAt": "date"
-	}
+  "my_article": {
+    "name1": "type1",
+    "name2": "type2",
+    "name3": "type3",
+    "_comment": "This is an example article, the format to follow."
+  },
+  "article": {
+    "test": "test2"
+  },
+  "betengan": {
+    "betengan": "beten"
+  }
 }
