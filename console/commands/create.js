@@ -1,4 +1,4 @@
-const { addToSchema } = require('../../utils/database/addToSchema');
+const schemaClient = require('../../utils/database/schema');
 
 function createCommand(command) {
     const parts = command.split(/\s+/);
@@ -27,12 +27,10 @@ function createCommand(command) {
     console.log('Article Name:', articleName);
     console.log('Names and Types:', typesAndNames);
 
-    addToSchema(articleName, typesAndNames);
+    schemaClient.addToSchema(articleName, typesAndNames);
 
     // Store the article name and types/names in database
     // Replace the console.log statements
 }
 
-module.exports = {
-    createCommand
-};
+module.exports = createCommand

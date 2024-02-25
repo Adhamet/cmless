@@ -7,6 +7,4 @@ function helpCommand(commands) {
     }
 }
 
-module.exports = {
-    helpCommand
-}
+module.exports = helpCommand

@@ -2,8 +2,8 @@
 // Interactive Command Line Terminal
 
 const readline = require('readline');
-const { createCommand } = require('./commands/create');
-const { helpCommand } = require('./commands/help');
+const createCommand = require('./commands/create');
+const helpCommand = require('./commands/help');
 
 class CLI {
     constructor() {
