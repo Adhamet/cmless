@@ -28,6 +28,21 @@ class schemaClient {
         return this.connected;
     }
 
+    async createArticle(articleData) {
+      if(!this.connected) {
+        console.error('Not connected to the database');
+        return;
+      }
+
+      const existingCollection = this.db.listCollections({ name: 'articles' }).toArray;
+      if (existingCollection.length == 0) {
+        await this.db.createCollection('articles');
+      }
+      
+      const result = await this.db.collection('articles').insertOne(articleData);
+      return result;
+    }
+
     static async addToSchema(articleName, typesAndNames) {
         const schemaPath = path.resolve(__dirname, '../../src/schema/content.json');
         const schemaContent = fs.readFileSync(schemaPath, 'utf-8');
