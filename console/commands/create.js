@@ -27,7 +27,8 @@ function createCommand(command) {
     console.log('Article Name:', articleName);
     console.log('Names and Types:', typesAndNames);
 
-    schemaClient.addToSchema(articleName, typesAndNames);
+    const mySchemaClient = schemaClient.connect();
+    mySchemaClient.addToSchema(articleName, typesAndNames);
 
     // Store the article name and types/names in database
     // Replace the console.log statements

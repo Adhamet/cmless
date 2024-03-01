@@ -4,42 +4,42 @@ const { MongoClient, ObjectID } = require('mongodb');
 
 class schemaClient {
     constructor() {
-        const host = process.env.DB_HOST || 'localhost';
-        const port = process.env.DB_PORT || 27017;
-        const database = process.env.DB_DATABASE || 'cmless';
-        this.connected = false;
-
-        this.mongoUri = `mongodb://${host}:${port}/${database}`;
-        this.client = new MongoClient(this.mongoUri, { useUnifiedTopology: true });
+      const url = 'mongodb://localhost:27017';
+      this.url = url;
+      this.dbName = 'admin';
+      this.username = "cmless";
+      this.password = "cmless_pass";
+      this.client = new MongoClient(`${this.url}/${this.dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
+      this.db = null;
     }
 
-    connect() {
-      return this.client.connect()
-        .then(() => {
-          this.db = this.client.db(database);
-          this.connected = true;
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+    async connect() {
+      try {
+        await this.client.connect();
+        this.db = this.client.db(this.dbName);
+        console.log('Connected to MongoDB');
+      } catch (error) {
+        console.log("CONNECTION ERR: " + error.message);
+        throw error;
+      }
     }
 
     isAlive() {
-        return this.connected;
+        return !!this.db;
     }
 
-    async createArticle(articleData) {
-      if(!this.connected) {
+    async createArticle(articleName, articleData) {
+      if(!this.db) {
         console.error('Not connected to the database');
         return;
       }
-
-      const existingCollection = this.db.listCollections({ name: 'articles' }).toArray;
+      
+      const existingCollection = await this.db.listCollections({ name: 'articles' }).toArray;
       if (existingCollection.length == 0) {
-        await this.db.createCollection('articles');
+        await this.db.createCollection(`${articleName}`);
       }
       
-      const result = await this.db.collection('articles').insertOne(articleData);
+      const result = await this.db.collection(`${articleName}`).insertOne(articleData);
       return result;
     }
 
