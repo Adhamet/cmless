@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const schemaClient = require('../utils/database/schema');
+const schemaClient = require('../utils/database/db');
 
 async function testCreateArticle() {
     const mySchemaClient = new schemaClient();

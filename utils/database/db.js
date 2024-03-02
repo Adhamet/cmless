@@ -1,15 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 const { MongoClient, ObjectID } = require('mongodb');
 
-class schemaClient {
+class dbClient {
     constructor() {
       const url = 'mongodb://localhost:27017';
       this.url = url;
       this.dbName = 'cmless';
       this.username = "cmless_user";
       this.password = "cmless_pass";
-      this.client = new MongoClient(`${this.url}/${this.dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
+      this.client = new MongoClient(`${this.url}/${this.dbName}`, { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        loggerLevel: 'error'
+      });
       this.db = null;
     }
 
@@ -17,9 +19,8 @@ class schemaClient {
       try {
         await this.client.connect();
         this.db = this.client.db(this.dbName);
-        console.log('Connected to MongoDB');
       } catch (error) {
-        console.log("CONNECTION ERR: " + error.message);
+        console.error("CONNECTION ERR: " + error.message);
         throw error;
       }
     }
@@ -34,7 +35,6 @@ class schemaClient {
 
       if (!dbExists) {
         await adminDb.admin().command({ create: this.dbName });
-        console.log('Database created successfully.');
       }
 
       const targetDb = this.client.db(this.dbName);
@@ -46,18 +46,26 @@ class schemaClient {
           pwd: this.password,
           roles: [{ role: 'readWrite', db: this.dbName }]
         });
-        console.log('User created successfully');
-      }
 
-      console.log("Database setup completed sucessfully");
+        this.db = targetDb;
+      }
     }
 
     async setupDatabase() {
+      process.on('warning', (warning) => {
+        // Ignore warnings.
+      });
+
       try {
         await this.connect();
+      } catch (error) {
+        console.error('Error connecting to database:', error.message);
+      }
+
+      try {
         await this.intializeDatabase();
       } catch (error) {
-        console.error('Error while setting up database:', error);
+        console.error('Error intializing database:', error.message);
       }
     }
 
@@ -71,27 +79,30 @@ class schemaClient {
         return;
       }
       
-      const existingCollection = await this.db.listCollections({ name: 'articles' }).toArray;
+      const existingCollection = await this.db.listCollections({ name: articleName }).toArray();
       if (existingCollection.length == 0) {
-        await this.db.createCollection(`${articleName}`);
+        return await this.db.createCollection(articleName);
       }
-      
-      return result;
     }
 
-    static async addToSchema(articleName, typesAndNames) {
-        const schemaPath = path.resolve(__dirname, '../../src/schema/content.json');
-        const schemaContent = fs.readFileSync(schemaPath, 'utf-8');
-        const schema = JSON.parse(schemaContent);
-    
-        schema[articleName] = {};
-        typesAndNames.forEach(pair => {
-            schema[articleName][pair.name] = pair.type;
-        });
-    
-        fs.writeFileSync(schemaPath, JSON.stringify(schema, null, 2));
+    async insertEntry(articleName, docData) {
+      if(!this.db) {
+        console.error('Not connected to the database');
+        return;
+      }
+      
+      return this.db.collection(articleName).insertOne(docData);
+    }
+
+    async disconnect() {
+      try {
+        await this.client.close();
+      } catch (error) {
+        console.error('Error disconnecting from MongoDB:', error);
+        throw error;
+      }
     }
 }
 
-const mySchemaClient = new schemaClient();
+const mySchemaClient = new dbClient();
 module.exports = mySchemaClient;

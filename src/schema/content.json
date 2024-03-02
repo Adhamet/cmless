@@ -17,5 +17,10 @@
     "ethnicity": "meniawy",
     "eyes": "brown",
     "height": "fivefootsix"
+  },
+  "betengans": {
+    "x": "test",
+    "y": "test",
+    "z": "test"
   }
 }

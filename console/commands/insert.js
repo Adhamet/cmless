@@ -1,41 +1,62 @@
-const schemaClient = require('../../utils/database/schema');
-const mySchemaClient = schemaClient();
+const fs = require('fs');
+const path = require('path');
+const mySchemaClient = require('../../utils/database/db');
 
-function insertCommand(command) {
-    mySchemaClient.setupDatabase();
+async function insertCommand(command) {
+    if (!mySchemaClient.isAlive) {
+        mySchemaClient.setupDatabase();
+    }
 
     const parts = command.split(/\s+/);
 
-    if (parts.length < 3) {
-        console.log("Invalid format.");
-        console.log("USAGE: insert article my_entry name1:type1 name2:type2 ...");
-        return;
+    // Check for format:
+    if (parts.length < 2) {
+        return "Invalid format.\nUSAGE: insert article name1:type1 name2:type2 ...";
     }
 
     const articleName = parts[0];
-    // Checks if it exists in the database:
-    const existingArticle = await mySchemaClient.db
-    const typesAndNames = [];
 
-    for (let i = 1; i < parts.length; i++) {
-        const pair = parts[i].split(':');
-        if (pair.length !== 2) {
-            console.log("Invalid format.");
-            console.log("USAGE: create my_article name1:type1 name2:type2 ...");
-            return;
-        }
-        const name = pair[0];
-        const type = pair[1];
-        typesAndNames.push({ name, type });
+    // Checks if article exists in the database:
+    const existingCollection = await mySchemaClient.db.listCollections({ name: articleName }).toArray();
+
+    if (existingCollection.length === 0) {
+        return "The article provided doesn't exist. Please provide an existing article."
     }
 
-    console.log('Article Name:', articleName);
-    console.log('Names and Types:', typesAndNames);
+    // Take in types and names:
+    const typesAndNames = {};
+    for (let i = 1; i < parts.length; i++) {
+        const [name, type] = parts[i].split(':');
+        typesAndNames[name] = type;
+    }
 
-    const mySchemaClient = schemaClient.connect();
-    mySchemaClient.addToSchema(articleName, typesAndNames);
+    // Compare types and names with schema respectively:
+    const schemaPath = path.resolve(__dirname, '../../src/schema/content.json');
+    const schemaContent = fs.readFileSync(schemaPath, 'utf-8');
+    const schema = JSON.parse(schemaContent);
 
-    mySchemaClient.createArticle(articleName);
+    const articleSchema = schema[articleName];
+
+    if (Object.keys(typesAndNames).length !== Object.keys(articleSchema).length) {
+        return "The count of attributes provided doesn't match the schema.";
+    }
+
+    const schemaTypes = Object.values(articleSchema);
+    const inputKeys = Object.keys(typesAndNames);
+    const inputTypes = Object.values(typesAndNames);
+
+    if (schemaTypes.length !== inputTypes.length) {
+        return "The count of attributes provided doesn't match the schema.";
+    }
+
+    for (let i = 0; i < schemaTypes.length; i++) {
+        if (schemaTypes[i] !== inputTypes[i]) {
+            return `Type at index ${inputKeys[i]} doesn't match the schema.`;
+        }
+    }
+
+    // Insert in db:
+    mySchemaClient.insertEntry(articleName, typesAndNames);
 }
 
-module.exports = createCommand
+module.exports = insertCommand
