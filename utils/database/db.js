@@ -94,6 +94,28 @@ class dbClient {
       return this.db.collection(articleName).insertOne(docData);
     }
 
+    async showArticles() {
+      if(!this.db) {
+        console.error('Not connected to the database');
+        return;
+      }
+      
+      const collections = await this.db.listCollections().toArray();
+      const articleNames = collections.map(collection => collection.name).filter(name => name !== 'system.indexes');
+      return articleNames;
+    }
+
+    async showEntries(collectionName) {
+      if(!this.db) {
+        console.error('Not connected to the database');
+        return [];
+      }
+
+      const collection = this.db.collection(collectionName);
+      const content = await collection.find().toArray();
+      return content;
+    }
+
     async disconnect() {
       try {
         await this.client.close();
