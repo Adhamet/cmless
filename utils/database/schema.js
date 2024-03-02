@@ -6,8 +6,8 @@ class schemaClient {
     constructor() {
       const url = 'mongodb://localhost:27017';
       this.url = url;
-      this.dbName = 'admin';
-      this.username = "cmless";
+      this.dbName = 'cmless';
+      this.username = "cmless_user";
       this.password = "cmless_pass";
       this.client = new MongoClient(`${this.url}/${this.dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
       this.db = null;
@@ -21,6 +21,43 @@ class schemaClient {
       } catch (error) {
         console.log("CONNECTION ERR: " + error.message);
         throw error;
+      }
+    }
+
+    async intializeDatabase() {
+      const adminDb = this.client.db('admin');
+
+      const dbList = await adminDb.admin().command({ listDatabases: 1 });
+      const dbNames = dbList.databases.map(db => db.name);
+    
+      const dbExists = dbNames.includes(this.dbName);
+
+      if (!dbExists) {
+        await adminDb.admin().command({ create: this.dbName });
+        console.log('Database created successfully.');
+      }
+
+      const targetDb = this.client.db(this.dbName);
+      const userInfo = await targetDb.command({ usersInfo: this.username });
+
+      if (userInfo.users.length === 0) {
+        await targetDb.command({
+          createUser: this.username,
+          pwd: this.password,
+          roles: [{ role: 'readWrite', db: this.dbName }]
+        });
+        console.log('User created successfully');
+      }
+
+      console.log("Database setup completed sucessfully");
+    }
+
+    async setupDatabase() {
+      try {
+        await this.connect();
+        await this.intializeDatabase();
+      } catch (error) {
+        console.error('Error while setting up database:', error);
       }
     }
 
