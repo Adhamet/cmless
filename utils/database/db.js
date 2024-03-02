@@ -94,6 +94,15 @@ class dbClient {
       return this.db.collection(articleName).insertOne(docData);
     }
 
+    async delete(collectionName, objectId) {
+      if(!this.db) {
+        console.error('Not connected to the database');
+        return;
+      }
+
+      return await this.db.collection(collectionName).deleteOne({ _id: objectId });
+    }
+
     async showArticles() {
       if(!this.db) {
         console.error('Not connected to the database');
