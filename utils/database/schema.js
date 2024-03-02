@@ -65,7 +65,7 @@ class schemaClient {
         return !!this.db;
     }
 
-    async createArticle(articleName, articleData) {
+    async createArticle(articleName) {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
@@ -76,7 +76,6 @@ class schemaClient {
         await this.db.createCollection(`${articleName}`);
       }
       
-      const result = await this.db.collection(`${articleName}`).insertOne(articleData);
       return result;
     }
 
@@ -94,4 +93,5 @@ class schemaClient {
     }
 }
 
-module.exports = schemaClient;
+const mySchemaClient = new schemaClient();
+module.exports = mySchemaClient;
