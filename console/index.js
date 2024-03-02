@@ -5,6 +5,7 @@ const readline = require('readline');
 const createCommand = require('./commands/create');
 const insertCommand = require('./commands/insert');
 const helpCommand = require('./commands/help');
+const deleteCommand = require('./commands/delete');
 const showsArticlesCommand = require('./commands/showArticles');
 const showEntriesCommand = require('./commands/showEntries');
 const mySchemaClient = require('../utils/database/db');
@@ -17,9 +18,9 @@ class CLI {
             // Database: Inserts a document in an existing collection according to its schema.
             "insert": "\tInserts an entry in an existing article.\n\t\tUSAGE: insert article my_entry name1:type1 name2:type2 ...",
             // Database: Updates a document in an existing collection according to its schema.
-            "update": "\tUpdates an entry in an existing article.\n\t\tUSAGE: update article my_entry name1:type1 name2:type2 ...",
+            "update": "\tUpdates an entry through its 'id' in an existing article.\n\t\tUSAGE: update article my_entry_id name1:type1 name2:type2 ...",
             // Database: Deletes a document in an existing collection.
-            "delete": "\tDeletes an entry from an existing article.\n\t\tUSAGE: delete article my_entry",
+            "delete": "\tDeletes an entry through its 'id' from an existing article.\n\t\tUSAGE: delete article my_entry_id",
             // Database: Shows the collections in the database.
             "showArticles": "\tShows the articles in the database.\n\t\tUSAGE: showCollection",
             // Database: Shows entries for a collection in the database.
