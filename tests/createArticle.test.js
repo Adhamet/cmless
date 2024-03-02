@@ -4,7 +4,7 @@ const schemaClient = require('../utils/database/schema');
 async function testCreateArticle() {
     const mySchemaClient = new schemaClient();
 
-    await mySchemaClient.connect();
+    await mySchemaClient.setupDatabase();
     
     const articleData = {
         title: 'Sample Article',
