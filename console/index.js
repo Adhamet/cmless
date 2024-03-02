@@ -2,9 +2,10 @@
 // Interactive Command Line Terminal
 
 const readline = require('readline');
+const helpCommand = require('./commands/help');
 const createCommand = require('./commands/create');
 const insertCommand = require('./commands/insert');
-const helpCommand = require('./commands/help');
+const updateCommand = require('./commands/update');
 const deleteCommand = require('./commands/delete');
 const showsArticlesCommand = require('./commands/showArticles');
 const showEntriesCommand = require('./commands/showEntries');
@@ -16,7 +17,7 @@ class CLI {
             // Database: creates a collection along with its schema.
             "create": "\tCreates an article with abstract attributes.\n\t\tUSAGE: create my_article name1:type1 name2:type2 ...",
             // Database: Inserts a document in an existing collection according to its schema.
-            "insert": "\tInserts an entry in an existing article.\n\t\tUSAGE: insert article my_entry name1:type1 name2:type2 ...",
+            "insert": "\tInserts an entry in an existing article.\n\t\tUSAGE: insert article name1:type1 name2:type2 ...",
             // Database: Updates a document in an existing collection according to its schema.
             "update": "\tUpdates an entry through its 'id' in an existing article.\n\t\tUSAGE: update article my_entry_id name1:type1 name2:type2 ...",
             // Database: Deletes a document in an existing collection.

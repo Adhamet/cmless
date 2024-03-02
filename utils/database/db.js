@@ -94,6 +94,15 @@ class dbClient {
       return this.db.collection(articleName).insertOne(docData);
     }
 
+    async updateEntry(collectionName, objectId, updateData) {
+      if (!this.db) {
+          console.error('Not connected to the database');
+          return;
+      }
+  
+      return await this.db.collection(collectionName).updateOne({ _id: objectId }, { $set: updateData });
+    }
+
     async delete(collectionName, objectId) {
       if(!this.db) {
         console.error('Not connected to the database');

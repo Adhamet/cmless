@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ObjectId } = require('mongodb');
 const mySchemaClient = require('../../utils/database/db');
 
 function stringToDataType(str) {
@@ -15,7 +16,7 @@ function stringToDataType(str) {
     }
 }
 
-async function insertCommand(command) {
+async function updateCommand(command) {
     if (!mySchemaClient.isAlive) {
         mySchemaClient.setupDatabase();
     }
@@ -23,8 +24,8 @@ async function insertCommand(command) {
     const parts = command.split(/\s+/);
 
     // Check for format:
-    if (parts.length < 2) {
-        return "Invalid format.\nUSAGE: insert collection name1:value1 name2:value2 ...";
+    if (parts.length < 3) {
+        return "Invalid format.\nUSAGE: insert collection my_entry_id name1:value1 name2:value2 ...";
     }
 
     const collectionName = parts[0];
@@ -36,11 +37,16 @@ async function insertCommand(command) {
         return "The collection provided doesn't exist. Please provide an existing collection."
     }
 
+    const id = parts[1];
+    if (!ObjectId.isValid(id)) {
+        return `Document with _id ${id} not found in ${collectionName} collection.\nIt is also an invalid ObjectId format. Please provide a valid ObjectId.`;
+    }
+
     // Take in types and names:
     const namesAndValues = {};
-    for (let i = 1; i < parts.length; i++) {
-        const [name, type] = parts[i].split(':');
-        namesAndValues[name] = type;
+    for (let i = 2; i < parts.length; i++) {
+        const [name, value] = parts[i].split(':');
+        namesAndValues[name] = value;
     }
 
     // Compare types and names with schema respectively:
@@ -50,16 +56,12 @@ async function insertCommand(command) {
 
     const collectionSchema = schema[collectionName];
 
-    if (Object.keys(namesAndValues).length !== Object.keys(collectionSchema).length) {
-        return "The count of attributes provided doesn't match the schema.";
-    }
-
     const schemaKeys = Object.keys(collectionSchema);
     const schemaTypes = Object.values(collectionSchema);
     const inputKeys = Object.keys(namesAndValues);
-    const inputValues = Object.values(namesAndValues);
+    const inputTypes = Object.values(namesAndValues);
 
-    if (schemaTypes.length !== inputValues.length) {
+    if (schemaTypes.length !== inputTypes.length) {
         return "The count of attributes provided doesn't match the schema.";
     }
 
@@ -72,8 +74,13 @@ async function insertCommand(command) {
         // }
     }
 
-    // Insert in db:
-    mySchemaClient.insertEntry(collectionName, namesAndValues);
+    // Update in db:
+    const result = await mySchemaClient.updateEntry(collectionName, ObjectId(id), namesAndValues);
+    if (result.modifiedCount === 1) {
+        return `Document with _id ${id} updated successfully in ${collectionName} collection.`;
+    } else {
+        return `Document with _id ${id} not found in ${collectionName} collection.`;
+    }
 }
 
-module.exports = insertCommand
+module.exports = updateCommand;

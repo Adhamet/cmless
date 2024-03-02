@@ -10,27 +10,27 @@ async function deleteCommand(command) {
     const parts = command.split(/\s+/);
 
     if (parts.length < 2) {
-        return "Invalid format.\nUSAGE: delete article my_entry_id"
+        return "Invalid format.\nUSAGE: delete collection my_entry_id"
     }
 
-    const articleName = parts[0];
+    const collectionName = parts[0];
 
-    const existingCollection = await mySchemaClient.db.listCollections({ name: articleName }).toArray();
+    const existingCollection = await mySchemaClient.db.listCollections({ name: collectionName }).toArray();
 
     if (existingCollection.length === 0) {
-        return "The article provided doesn't exist. Please provide an existing article."
+        return "The collection provided doesn't exist. Please provide an existing collection."
     }
     
     const id = parts[1];
     if (!ObjectId.isValid(id)) {
-        return `Document with _id ${id} not found in ${articleName} collection.\nIt is also an invalid ObjectId format. Please provide a valid ObjectId.`;
+        return `Document with _id ${id} not found in ${collectionName} collection.\nIt is also an invalid ObjectId format. Please provide a valid ObjectId.`;
     }
     
-    const result = await mySchemaClient.delete(articleName, ObjectId(id));
+    const result = await mySchemaClient.delete(collectionName, ObjectId(id));
     if (result.deletedCount === 1) {
-        return `Document with _id ${id} deleted successfully from ${articleName} collection.`;
+        return `Document with _id ${id} deleted successfully from ${collectionName} collection.`;
     } else {
-        return `Document with _id ${id} not found in ${articleName} collection.`;
+        return `Document with _id ${id} not found in ${collectionName} collection.`;
     }
 }
 
