@@ -15,17 +15,17 @@ class CLI {
     constructor() {
         this.commands = {
             // Database: creates a collection along with its schema.
-            "create": "\tCreates an article with abstract attributes.\n\t\tUSAGE: create my_article name1:type1 name2:type2 ...",
+            "create": "\t\tCreates an collection with abstract attributes.\n\t\t\tUSAGE: create my_collection name1:type1 name2:type2 ...",
             // Database: Inserts a document in an existing collection according to its schema.
-            "insert": "\tInserts an entry in an existing article.\n\t\tUSAGE: insert article name1:type1 name2:type2 ...",
+            "insert": "\t\tInserts an entry in an existing collection.\n\t\t\tUSAGE: insert collection name1:type1 name2:type2 ...",
             // Database: Updates a document in an existing collection according to its schema.
-            "update": "\tUpdates an entry through its 'id' in an existing article.\n\t\tUSAGE: update article my_entry_id name1:type1 name2:type2 ...",
+            "update": "\t\tUpdates an entry through its 'id' in an existing collection.\n\t\t\tUSAGE: update collection my_entry_id name1:type1 name2:type2 ...",
             // Database: Deletes a document in an existing collection.
-            "delete": "\tDeletes an entry through its 'id' from an existing article.\n\t\tUSAGE: delete article my_entry_id",
+            "delete": "\t\tDeletes an entry through its 'id' from an existing collection.\n\t\t\tUSAGE: delete collection my_entry_id",
             // Database: Shows the collections in the database.
-            "showArticles": "\tShows the articles in the database.\n\t\tUSAGE: showCollection",
+            "showCollection": "\tShows the collection in the database.\n\t\t\tUSAGE: showCollection",
             // Database: Shows entries for a collection in the database.
-            "showEntries": "\tShows entries for a collection in the database.\n\t\tUSAGE: showEntries <article>"
+            "showEntries": "\t\tShows entries for a collection in the database.\n\t\t\tUSAGE: showEntries <collection>"
         };
     }
 
@@ -75,7 +75,7 @@ class CLI {
             return getCommand(argument);
         } else if (action === 'delete') {
             return deleteCommand(argument);
-        } else if (action === 'showArticles') {
+        } else if (action === 'showCollection') {
             return showsArticlesCommand(argument);
         } else if (action === 'showEntries') {
             return showEntriesCommand(argument);

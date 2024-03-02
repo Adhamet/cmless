@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const schema = require('../schema/content.json');
-const db = require('../../utils/database/schema');
+const db = require('../../utils/database/db');
+const mySchemaClient = require('../../utils/database/db');
 // const { spawn } = require('child_process');
 
 async function setupAPIRoutes() {
+  await mySchemaClient.setupDatabase();
   try {
     for (const collectionName in schema) {
       router.get(`/${collectionName}`, async (req, res) => {
         try {
-          const documents = await db.findDocuments(collectionName, req.query);
+          const documents = await db.showEntries(collectionName);
           res.json(documents);
         } catch (error) {
           res.status(500).json({ error: 'Internal server error' });

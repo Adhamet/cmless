@@ -22,5 +22,9 @@
     "maslooqa": "bool",
     "maqliya": "bool",
     "matbookha": "bool"
+  },
+  "authors": {
+    "name": "string",
+    "age": "int"
   }
 }
