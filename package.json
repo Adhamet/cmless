@@ -4,6 +4,9 @@
     "mongodb": "^3.6.0"
   },
   "scripts": {
-    "console": "node console/index.js"
+    "console": "nodemon --no-warnings console/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
