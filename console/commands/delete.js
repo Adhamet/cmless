@@ -20,13 +20,13 @@ async function deleteCommand(command) {
     if (existingCollection.length === 0) {
         return "The collection provided doesn't exist. Please provide an existing collection."
     }
-    
+
     const id = parts[1];
     if (!ObjectId.isValid(id)) {
         return `Document with _id ${id} not found in ${collectionName} collection.\nIt is also an invalid ObjectId format. Please provide a valid ObjectId.`;
     }
-    
-    const result = await mySchemaClient.delete(collectionName, ObjectId(id));
+
+    const result = await mySchemaClient.deleteDocument(collectionName, ObjectId(id));
     if (result.deletedCount === 1) {
         return `Document with _id ${id} deleted successfully from ${collectionName} collection.`;
     } else {

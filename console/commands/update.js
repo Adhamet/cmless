@@ -75,7 +75,7 @@ async function updateCommand(command) {
     }
 
     // Update in db:
-    const result = await mySchemaClient.updateEntry(collectionName, ObjectId(id), namesAndValues);
+    const result = await mySchemaClient.updateDocument(collectionName, ObjectId(id), namesAndValues);
     if (result.modifiedCount === 1) {
         return `Document with _id ${id} updated successfully in ${collectionName} collection.`;
     } else {

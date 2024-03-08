@@ -34,5 +34,12 @@
   "users": {
     "name": "string",
     "age": "int"
+  },
+  "user": {
+    "name": "string"
+  },
+  "people": {
+    "name": "string",
+    "age": "int"
   }
 }

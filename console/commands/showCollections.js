@@ -5,7 +5,7 @@ async function showArticlesCommand() {
         mySchemaClient.setupDatabase();
     }
 
-    const articles = await mySchemaClient.showArticles();
+    const articles = await mySchemaClient.showCollections();
     console.log("List of articles in the database:");
     articles.forEach(article => console.log(article));
     return;

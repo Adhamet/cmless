@@ -71,7 +71,7 @@ class dbClient {
         return !!this.db;
     }
 
-    async createArticle(articleName) {
+    async createCollection(articleName) {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
@@ -83,7 +83,7 @@ class dbClient {
       }
     }
 
-    async insertEntry(articleName, docData) {
+    async insertDocument(articleName, docData) {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
@@ -92,7 +92,7 @@ class dbClient {
       return this.db.collection(articleName).insertOne(docData);
     }
 
-    async updateEntry(collectionName, objectId, updateData) {
+    async updateDocument(collectionName, objectId, updateData) {
       if (!this.db) {
           console.error('Not connected to the database');
           return;
@@ -101,7 +101,7 @@ class dbClient {
       return await this.db.collection(collectionName).updateOne({ _id: objectId }, { $set: updateData });
     }
 
-    async delete(collectionName, objectId) {
+    async deleteDocument(collectionName, objectId) {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
@@ -110,7 +110,7 @@ class dbClient {
       return await this.db.collection(collectionName).deleteOne({ _id: objectId });
     }
 
-    async showArticles() {
+    async showCollections() {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
@@ -121,7 +121,7 @@ class dbClient {
       return articleNames;
     }
 
-    async showEntries(collectionName) {
+    async showDocuments(collectionName) {
       if(!this.db) {
         console.error('Not connected to the database');
         return [];

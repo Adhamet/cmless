@@ -11,7 +11,7 @@ async function showEntriesCommand(collectionName) {
         return "The article provided doesn't exist. Please provide an existing article."
     }
 
-    const content = await mySchemaClient.showEntries(collectionName);
+    const content = await mySchemaClient.showDocuments(collectionName);
     await content.forEach(document => {
         console.log(document);
     });

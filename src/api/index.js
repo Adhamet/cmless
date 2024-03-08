@@ -10,10 +10,10 @@ async function setupAPIRoutes() {
     for (const collectionName in schema) {
       router.get(`/${collectionName}`, async (req, res) => {
         try {
-          const documents = await db.showEntries(collectionName);
+          const documents = await db.showDocuments(collectionName);
           res.json(documents);
         } catch (error) {
-          res.status(500).json({ error: 'Internal server error' });
+          res.status(500).json({ error: `Internal server error ${error}` });
         }
       });
 

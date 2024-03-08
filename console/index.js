@@ -7,8 +7,8 @@ const createCommand = require("./commands/create");
 const insertCommand = require("./commands/insert");
 const updateCommand = require("./commands/update");
 const deleteCommand = require("./commands/delete");
-const showsArticlesCommand = require("./commands/showArticles");
-const showEntriesCommand = require("./commands/showEntries");
+const showsCollectionsCommand = require("./commands/showCollections");
+const showDocumentsCommand = require("./commands/showDocuments");
 const mySchemaClient = require("../utils/database/db");
 const { spawn } = require("child_process");
 
@@ -25,11 +25,11 @@ async function startAPI() {
 
     // Log API output
     apiProcess.stdout.on("data", (data) => {
-        console.log(`(API) ${data}`);
+        process.stdout.write(`(API) ${data}`);
     });
 
     apiProcess.stderr.on("data", (data) => {
-        console.error(`(API) Error: ${data}`);
+        process.stdout.write(`(API) Error: ${data}`);
     });
 
     await sleep(1);
@@ -65,17 +65,21 @@ class CLI {
             delete:
                 "\t\tDeletes an entry through its 'id' from an existing collection.\n\t\t\tUSAGE: delete collection my_entry_id",
             // Database: Shows the collections in the database.
-            showCollection:
+            showCollections:
                 "\tShows the collection in the database.\n\t\t\tUSAGE: showCollection",
             // Database: Shows entries for a collection in the database.
-            showEntries:
+            showDocuments:
                 "\t\tShows entries for a collection in the database.\n\t\t\tUSAGE: showEntries <collection>",
         };
     }
 
     async run() {
-        console.log("Welcome to CMLess!");
-        console.log("Type 'help' to see available commands.");
+        console.log(`
+---------------------------------------------
+| Welcome to CMLess!                        |
+| Type 'help' to see available commands.    |
+---------------------------------------------
+        `);
 
         await startAPI();
 
@@ -116,7 +120,7 @@ class CLI {
             return helpCommand(this.commands);
         } else if (action === "create") {
             const res = createCommand(argument);
-              await restartAPI();
+            await restartAPI();
             return res;
         } else if (action === "insert") {
             return insertCommand(argument);
@@ -126,10 +130,10 @@ class CLI {
             return getCommand(argument);
         } else if (action === "delete") {
             return deleteCommand(argument);
-        } else if (action === "showCollection") {
-            return showsArticlesCommand(argument);
-        } else if (action === "showEntries") {
-            return showEntriesCommand(argument);
+        } else if (action === "showCollections") {
+            return showsCollectionsCommand(argument);
+        } else if (action === "showDocuments") {
+            return showDocumentsCommand(argument);
         } else {
             console.log("Command not found, type 'help' for available commands.");
             return null;

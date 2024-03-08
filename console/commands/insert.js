@@ -73,7 +73,7 @@ async function insertCommand(command) {
     }
 
     // Insert in db:
-    mySchemaClient.insertEntry(collectionName, namesAndValues);
+    mySchemaClient.insertDocument(collectionName, namesAndValues);
 }
 
 module.exports = insertCommand

@@ -30,7 +30,7 @@ function createCommand(command) {
     console.log('Names and Types:', typesAndNames);
 
     addToSchema(articleName, typesAndNames);
-    mySchemaClient.createArticle(articleName);
+    mySchemaClient.createCollection(articleName);
 }
 
 module.exports = createCommand
