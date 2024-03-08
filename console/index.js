@@ -10,6 +10,40 @@ const deleteCommand = require('./commands/delete');
 const showsArticlesCommand = require('./commands/showArticles');
 const showEntriesCommand = require('./commands/showEntries');
 const mySchemaClient = require('../utils/database/db');
+const { spawn } = require('child_process');
+
+let apiProcess;
+
+function startAPI() {
+    apiProcess = spawn('node', ['routes/APIServer.js']);
+
+    // Log API output
+    apiProcess.stdout.on('data', (data) => {
+        console.log(`API: ${data}`);
+    });
+
+    apiProcess.stderr.on('data', (data) => {
+        console.error(`API Error: ${data}`);
+    });
+
+    apiProcess.on('close', (code) => {
+        console.log(`API process exited with code ${code}`);
+    });
+}
+
+// Function to restart the Express API
+function restartAPI() {
+    if (apiProcess) {
+        console.log('Restarting API...');
+        apiProcess.kill('SIGTERM'); // or 'SIGKILL' if SIGTERM doesn't work
+        startAPI();
+    } else {
+        console.log('API is not running. Starting API...');
+        startAPI();
+    }
+}
+
+startAPI();
 
 class CLI {
     constructor() {
@@ -54,10 +88,13 @@ class CLI {
         rl.on('close', () => {
             console.log("\nExiting CMLess...");
             mySchemaClient.disconnect();
+            if (apiProcess) {
+                apiProcess.kill('SIGTERM');
+            }
             process.exit(0);
         })
     }
-    
+
     async executeCommand(command) {
         const parts = command.split(/\s+/);
         const action = parts[0];
@@ -66,7 +103,9 @@ class CLI {
         if (action === 'help') {
             return helpCommand(this.commands);
         } else if (action === 'create') {
-            return createCommand(argument);
+            const res = createCommand(argument);
+            restartAPI();
+            return res;
         } else if (action === 'insert') {
             return insertCommand(argument);
         } else if (action === 'update') {

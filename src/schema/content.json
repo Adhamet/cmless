@@ -26,5 +26,9 @@
   "authors": {
     "name": "string",
     "age": "int"
+  },
+  "hello": {
+    "name": "string",
+    "age": "int"
   }
 }
