@@ -2,13 +2,11 @@ const { MongoClient, ObjectID } = require('mongodb');
 
 class dbClient {
     constructor() {
-      const url = 'mongodb://localhost:27017';
-      this.url = url;
-      this.dbName = 'cmless';
-      this.username = "cmless_user";
-      this.password = "cmless_pass";
-      this.client = new MongoClient(`${this.url}/${this.dbName}`, { 
-        useNewUrlParser: true, 
+      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless_user";
+      this.password = process.env.MONGO_INITDB_ROOT_PASSWORD || "cmless_pass";
+      this.dbName = "cmless";
+      this.client = new MongoClient(`'mongodb://${this.username}:${this.password}@localhost:27017'`, {
+        useNewUrlParser: true,
         useUnifiedTopology: true,
         loggerLevel: 'error'
       });
@@ -30,7 +28,7 @@ class dbClient {
 
       const dbList = await adminDb.admin().command({ listDatabases: 1 });
       const dbNames = dbList.databases.map(db => db.name);
-    
+
       const dbExists = dbNames.includes(this.dbName);
 
       if (!dbExists) {
@@ -78,7 +76,7 @@ class dbClient {
         console.error('Not connected to the database');
         return;
       }
-      
+
       const existingCollection = await this.db.listCollections({ name: articleName }).toArray();
       if (existingCollection.length == 0) {
         return await this.db.createCollection(articleName);
@@ -90,7 +88,7 @@ class dbClient {
         console.error('Not connected to the database');
         return;
       }
-      
+
       return this.db.collection(articleName).insertOne(docData);
     }
 
@@ -99,7 +97,7 @@ class dbClient {
           console.error('Not connected to the database');
           return;
       }
-  
+
       return await this.db.collection(collectionName).updateOne({ _id: objectId }, { $set: updateData });
     }
 
@@ -117,7 +115,7 @@ class dbClient {
         console.error('Not connected to the database');
         return;
       }
-      
+
       const collections = await this.db.listCollections().toArray();
       const articleNames = collections.map(collection => collection.name).filter(name => name !== 'system.indexes');
       return articleNames;

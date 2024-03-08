@@ -4,7 +4,7 @@
     "mongodb": "^3.6.0"
   },
   "scripts": {
-    "console": "nodemon --no-warnings console/index.js"
+    "console": "nodemon --no-warnings --ignore 'content.json' console/index.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

@@ -3,7 +3,6 @@ const router = express.Router();
 const schema = require('../schema/content.json');
 const db = require('../../utils/database/db');
 const mySchemaClient = require('../../utils/database/db');
-// const { spawn } = require('child_process');
 
 async function setupAPIRoutes() {
   await mySchemaClient.setupDatabase();

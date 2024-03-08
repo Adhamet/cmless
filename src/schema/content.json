@@ -6,7 +6,7 @@
     "_comment": "This is an example article, the format to follow."
   },
   "article": {
-    "test": "test2"
+    "name": "string"
   },
   "betengan": {
     "test4": "test4",
@@ -28,6 +28,10 @@
     "age": "int"
   },
   "hello": {
+    "name": "string",
+    "age": "int"
+  },
+  "users": {
     "name": "string",
     "age": "int"
   }
