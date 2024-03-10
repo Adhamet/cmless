@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // Interactive Command Line Terminal
 
-const readline = require("readline");
 const helpCommand = require("./commands/help");
 const createCommand = require("./commands/create");
 const insertCommand = require("./commands/insert");
@@ -15,6 +14,7 @@ const { spawn } = require("child_process");
 class CLI {
     constructor() {
         this.apiProcess;
+        this.cliStarted = false;
         this.commands = {
             // Database: creates a collection along with its schema.
             create:
@@ -74,19 +74,18 @@ class CLI {
         const parts = command.split(/\s+/);
         const action = parts[0];
         const argument = parts.slice(1).join(" ");
-
         if (action === "help") {
             return helpCommand(this.commands);
         } else if (action === "create") {
             const res = createCommand(argument);
-            await this.restartAPI();
+            if (res === "") {
+                await this.restartAPI();
+            }
             return res;
         } else if (action === "insert") {
             return insertCommand(argument);
         } else if (action === "update") {
             return updateCommand(argument);
-        } else if (action === "get") {
-            return getCommand(argument);
         } else if (action === "delete") {
             return deleteCommand(argument);
         } else if (action === "showCollections") {
@@ -97,28 +96,24 @@ class CLI {
             return `Command not found, type 'help' for available commands.`;
         }
     }
+    
 
-    async startCLI() {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            prompt: "(cmless) ",
-        });
-    
+    async setupInputHandlers() {
         await mySchemaClient.setupDatabase();
-    
-        rl.on("line", async (input) => {
-            const errMsg = await this.executeCommand(input.trim());
+
+        process.stdin.setEncoding('utf8');
+
+        // Handle user input
+        process.stdin.on('data', async (data) => {
+            const errMsg = await this.executeCommand(data.trim());
             if (errMsg) {
                 console.log(`Error: ${errMsg}`);
             }
-            rl.prompt();
+            process.stdout.write('(cmless) ');
         });
-    
-        rl.prompt();
-    
-        rl.on("close", () => {
-            console.log("\nExiting CMLess...");
+        
+        process.on('SIGINT', () => {
+            process.stdout.write("\nExiting CMLess...");
             mySchemaClient.disconnect();
             if (this.apiProcess) {
                 this.apiProcess.kill("SIGTERM");
@@ -136,7 +131,8 @@ class CLI {
         `);
 
         process.stdout.write(await this.startAPI());
-        await this.startCLI();
+        this.setupInputHandlers(); // Set up input handlers
+        process.stdout.write('(cmless) ');
     }
 }
 

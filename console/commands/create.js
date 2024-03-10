@@ -31,6 +31,7 @@ function createCommand(command) {
 
     addToSchema(articleName, typesAndNames);
     mySchemaClient.createCollection(articleName);
+    return "";
 }
 
 module.exports = createCommand
