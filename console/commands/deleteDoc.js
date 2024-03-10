@@ -1,8 +1,7 @@
 const { ObjectId } = require('mongodb');
 const mySchemaClient = require('../../utils/database/db');
-const addToSchema = require('../../utils/database/addToSchema');
 
-async function deleteCommand(command) {
+async function deleteDocCommand(command) {
     if (!mySchemaClient.isAlive) {
         mySchemaClient.setupDatabase();
     }
@@ -34,4 +33,4 @@ async function deleteCommand(command) {
     }
 }
 
-module.exports = deleteCommand;
+module.exports = deleteDocCommand;

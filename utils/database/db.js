@@ -101,6 +101,20 @@ class dbClient {
       return await this.db.collection(collectionName).updateOne({ _id: objectId }, { $set: updateData });
     }
 
+    async deleteCollection(collectionName) {
+      if(!this.db) {
+        console.error('Not connected to the database');
+        return;
+      }
+
+      try {
+        await this.db.collection(collectionName).drop();
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
     async deleteDocument(collectionName, objectId) {
       if(!this.db) {
         console.error('Not connected to the database');

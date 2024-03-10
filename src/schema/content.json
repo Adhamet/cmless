@@ -5,29 +5,7 @@
     "name3": "type3",
     "_comment": "This is an example article, the format to follow."
   },
-  "article": {
-    "name": "string"
-  },
-  "betengan": {
-    "test4": "test4",
-    "test5": "test5",
-    "test6": "test6"
-  },
-  "youssef": {
-    "ethnicity": "meniawy",
-    "eyes": "brown",
-    "height": "fivefootsix"
-  },
-  "betengans": {
-    "maslooqa": "bool",
-    "maqliya": "bool",
-    "matbookha": "bool"
-  },
   "authors": {
-    "name": "string",
-    "age": "int"
-  },
-  "hello": {
     "name": "string",
     "age": "int"
   },
@@ -35,11 +13,12 @@
     "name": "string",
     "age": "int"
   },
-  "user": {
-    "name": "string"
-  },
   "people": {
     "name": "string",
     "age": "int"
+  },
+  "betengans": {
+    "test": "test3",
+    "test3": "test6"
   }
 }

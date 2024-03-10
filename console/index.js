@@ -5,7 +5,8 @@ const helpCommand = require("./commands/help");
 const createCommand = require("./commands/create");
 const insertCommand = require("./commands/insert");
 const updateCommand = require("./commands/update");
-const deleteCommand = require("./commands/delete");
+const deleteCollCommand = require("./commands/deleteColl");
+const deleteDocCommand = require("./commands/deleteDoc");
 const showsCollectionsCommand = require("./commands/showCollections");
 const showDocumentsCommand = require("./commands/showDocuments");
 const mySchemaClient = require("../utils/database/db");
@@ -25,9 +26,12 @@ class CLI {
             // Database: Updates a document in an existing collection according to its schema.
             update:
                 "\t\tUpdates an entry through its 'id' in an existing collection.\n\t\t\tUSAGE: update collection my_entry_id name1:type1 name2:type2 ...",
+            // Database: Delets an existing collection.
+            deleteCollection:
+                "\tDeletes an existing collection.\n\t\t\tUSAGE: delete collection",
             // Database: Deletes a document in an existing collection.
-            delete:
-                "\t\tDeletes an entry through its 'id' from an existing collection.\n\t\t\tUSAGE: delete collection my_entry_id",
+            deleteDocument:
+                "\tDeletes an entry through its 'id' from an existing collection.\n\t\t\tUSAGE: delete collection my_entry_id",
             // Database: Shows the collections in the database.
             showCollections:
                 "\tShows the collection in the database.\n\t\t\tUSAGE: showCollection",
@@ -86,8 +90,10 @@ class CLI {
             return insertCommand(argument);
         } else if (action === "update") {
             return updateCommand(argument);
-        } else if (action === "delete") {
-            return deleteCommand(argument);
+        } else if (action === "deleteCollection") {
+            return deleteCollCommand(argument);
+        } else if (action === "deleteDocument") {
+            return deleteDocCommand(argument);
         } else if (action === "showCollections") {
             return showsCollectionsCommand(argument);
         } else if (action === "showDocuments") {
@@ -103,11 +109,10 @@ class CLI {
 
         process.stdin.setEncoding('utf8');
 
-        // Handle user input
         process.stdin.on('data', async (data) => {
-            const errMsg = await this.executeCommand(data.trim());
-            if (errMsg) {
-                console.log(`Error: ${errMsg}`);
+            const msg = await this.executeCommand(data.trim());
+            if (msg) {
+                process.stdout.write(`${msg}\n`);
             }
             process.stdout.write('(cmless) ');
         });
