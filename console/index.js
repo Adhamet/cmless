@@ -12,45 +12,9 @@ const showDocumentsCommand = require("./commands/showDocuments");
 const mySchemaClient = require("../utils/database/db");
 const { spawn } = require("child_process");
 
-let apiProcess;
-
-function sleep(seconds) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, seconds * 1000);
-    });
-}
-
-async function startAPI() {
-    apiProcess = spawn("node", ["routes/APIServer.js"]);
-
-    // Log API output
-    apiProcess.stdout.on("data", (data) => {
-        process.stdout.write(`(API) ${data}`);
-    });
-
-    apiProcess.stderr.on("data", (data) => {
-        process.stdout.write(`(API) Error: ${data}`);
-    });
-
-    await sleep(1);
-}
-
-// Function to restart the Express API
-async function restartAPI() {
-    if (apiProcess) {
-        console.log("(API) Restarting API...");
-        apiProcess.kill("SIGTERM"); // or 'SIGKILL' if SIGTERM doesn't work
-        startAPI();
-    } else {
-        console.log("(API) API is not running. Starting API...");
-        startAPI();
-    }
-
-    await sleep(1);
-}
-
 class CLI {
     constructor() {
+        this.apiProcess;
         this.commands = {
             // Database: creates a collection along with its schema.
             create:
@@ -73,42 +37,37 @@ class CLI {
         };
     }
 
-    async run() {
-        console.log(`
----------------------------------------------
-| Welcome to CMLess!                        |
-| Type 'help' to see available commands.    |
----------------------------------------------
-        `);
-
-        await startAPI();
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            prompt: "(cmless) ",
+    async startAPI() {
+        return new Promise((resolve) => {
+            let stdoutData = '(API) ';
+    
+            this.apiProcess = spawn("node", ["routes/APIServer.js"]);
+    
+            this.apiProcess.stdout.on("data", (data) => {
+                const message = data.toString();
+                stdoutData += message;
+            });
+    
+            this.apiProcess.stderr.on("data", (data) => {
+                process.stdout.write(`(API) Error: ${data}`);
+            });
+    
+            this.apiProcess.stdout.on("data", (data) => {
+                if (data.toString().includes("Server is running")) {
+                    resolve(stdoutData);
+                }
+            });
         });
-
-        await mySchemaClient.setupDatabase();
-
-        rl.on("line", async (input) => {
-            const errMsg = await this.executeCommand(input.trim());
-            if (errMsg) {
-                console.log(`Error: ${errMsg}`);
-            }
-            rl.prompt();
-        });
-
-        rl.prompt();
-
-        rl.on("close", () => {
-            console.log("\nExiting CMLess...");
-            mySchemaClient.disconnect();
-            if (apiProcess) {
-                apiProcess.kill("SIGTERM");
-            }
-            process.exit(0);
-        });
+    } 
+    async restartAPI() {
+        if (this.apiProcess) {
+            console.log("(API) Restarting API...");
+            this.apiProcess.kill("SIGTERM"); // or 'SIGKILL' if SIGTERM doesn't work
+            await this.startAPI();
+        } else {
+            console.log("(API) API is not running. Starting API...");
+            await this.startAPI();
+        }
     }
 
     async executeCommand(command) {
@@ -120,7 +79,7 @@ class CLI {
             return helpCommand(this.commands);
         } else if (action === "create") {
             const res = createCommand(argument);
-            await restartAPI();
+            await this.restartAPI();
             return res;
         } else if (action === "insert") {
             return insertCommand(argument);
@@ -135,9 +94,49 @@ class CLI {
         } else if (action === "showDocuments") {
             return showDocumentsCommand(argument);
         } else {
-            console.log("Command not found, type 'help' for available commands.");
-            return null;
+            return `Command not found, type 'help' for available commands.`;
         }
+    }
+
+    async startCLI() {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            prompt: "(cmless) ",
+        });
+    
+        await mySchemaClient.setupDatabase();
+    
+        rl.on("line", async (input) => {
+            const errMsg = await this.executeCommand(input.trim());
+            if (errMsg) {
+                console.log(`Error: ${errMsg}`);
+            }
+            rl.prompt();
+        });
+    
+        rl.prompt();
+    
+        rl.on("close", () => {
+            console.log("\nExiting CMLess...");
+            mySchemaClient.disconnect();
+            if (this.apiProcess) {
+                this.apiProcess.kill("SIGTERM");
+            }
+            process.exit(0);
+        });
+    }
+
+    async run() {
+        console.log(`
+---------------------------------------------
+| Welcome to CMLess!                        |
+| Type 'help' to see available commands.    |
+---------------------------------------------
+        `);
+
+        process.stdout.write(await this.startAPI());
+        await this.startCLI();
     }
 }
 

@@ -2,7 +2,7 @@ const { MongoClient, ObjectID } = require('mongodb');
 
 class dbClient {
     constructor() {
-      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless_user";
+      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless";
       this.password = process.env.MONGO_INITDB_ROOT_PASSWORD || "cmless_pass";
       this.dbName = "cmless";
       this.client = new MongoClient(`'mongodb://${this.username}:${this.password}@localhost:27017'`, {
