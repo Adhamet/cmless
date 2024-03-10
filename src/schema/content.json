@@ -18,7 +18,8 @@
     "age": "int"
   },
   "betengans": {
-    "test": "test3",
-    "test3": "test6"
+    "maslooqa": "bool",
+    "maqliya": "bool",
+    "matbookha": "bool"
   }
 }
