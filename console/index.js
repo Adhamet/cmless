@@ -19,27 +19,27 @@ class CLI {
         this.commands = {
             // Database: creates a collection along with its schema.
             create:
-                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...",
+                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...\n\t\t\tTypes available: string, bool, int",
             // Database: Inserts a document in an existing collection according to its schema.
             insert:
-                "\t\tInserts an entry in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:type1> <name2:type2> ...",
+                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:type1> <name2:type2> ...",
             // Database: Updates a document in an existing collection according to its schema.
             update:
-                "\t\tUpdates an entry through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <my_entry_id> <name1:type1> <name2:type2> ...",
+                "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <my_entry_id> <name1:type1> <name2:type2> ...",
             // Database: Delets an existing collection.
-            deleteCollection:
-                "\tDeletes an existing collection.\n\t\t\tUSAGE: delete <collection>",
+            delColl:
+                "\t\tDeletes an existing collection.\n\t\t\tUSAGE: delColl <collection>",
             // Database: Deletes a document in an existing collection.
-            deleteDocument:
-                "\tDeletes an entry through its 'id' from an existing collection.\n\t\t\tUSAGE: delete <collection> <my_entry_id>",
+            delDoc:
+                "\t\tDeletes a document through its 'id' from an existing collection.\n\t\t\tUSAGE: delDoc <collection> <my_entry_id>",
             // Database: Shows the collections in the database.
-            showCollections:
-                "\tShows the collection in the database.\n\t\t\tUSAGE: showCollection",
-            showCollAttrs:
-                "\tShows an existing collection in the database's attributes.\n\t\t\tUSAGE: showCollectionAttr <collection>",
+            showColls:
+                "\t\tShows the collection in the database.\n\t\t\tUSAGE: showColls",
+            showAttrs:
+                "\t\tShows an existing collection in the database's attributes.\n\t\t\tUSAGE: showAttrs <collection>",
             // Database: Shows entries for a collection in the database.
-            showDocuments:
-                "\t\tShows entries for a collection in the database.\n\t\t\tUSAGE: showEntries <collection>",
+            showDocs:
+                "\t\tShows documents for a collection in the database.\n\t\t\tUSAGE: showDocs <collection>",
         };
     }
 
@@ -92,15 +92,15 @@ class CLI {
             return insertCommand(argument);
         } else if (action === "update") {
             return updateCommand(argument);
-        } else if (action === "deleteCollection") {
+        } else if (action === "delColl") {
             return deleteCollCommand(argument);
-        } else if (action === "deleteDocument") {
+        } else if (action === "delDoc") {
             return deleteDocCommand(argument);
-        } else if (action === "showCollections") {
+        } else if (action === "showColls") {
             return showCollCommand(argument);
-        }   else if (action === "showCollAttrs") {
+        }   else if (action === "showAttrs") {
             return showCollAttrsCommand(argument);
-        } else if (action === "showDocuments") {
+        } else if (action === "showDocs") {
             return showDocCommand(argument);
         } else {
             return `Command not found, type 'help' for available commands.`;

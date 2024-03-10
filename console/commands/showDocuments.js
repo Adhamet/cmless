@@ -8,7 +8,7 @@ async function showEntriesCommand(collectionName) {
     const existingCollection = await mySchemaClient.db.listCollections({ name: collectionName }).toArray();
 
     if (existingCollection.length === 0) {
-        return "The article provided doesn't exist. Please provide an existing article."
+        return "The collection provided doesn't exist. Please provide an existing collection."
     }
 
     const content = await mySchemaClient.showDocuments(collectionName);

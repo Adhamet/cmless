@@ -9,17 +9,14 @@
     "name": "string",
     "age": "int"
   },
-  "users": {
-    "name": "string",
-    "age": "int"
-  },
-  "people": {
-    "name": "string",
-    "age": "int"
-  },
   "betengans": {
-    "maslooqa": "bool",
+    "matbookha": "bool",
     "maqliya": "bool",
-    "matbookha": "bool"
+    "maslooqa": "bool"
+  },
+  "user": {
+    "name": "string",
+    "age": "int",
+    "worker": "bool"
   }
 }

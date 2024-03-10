@@ -2,19 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { ObjectId } = require('mongodb');
 const mySchemaClient = require('../../utils/database/db');
-
-function stringToDataType(str) {
-    switch(str.toLowerCase()) {
-        case "bool":
-            return Boolean;
-        case "int":
-            return Number;
-        case "string":
-            return String;
-        default:
-            return null; // or throw an error if the string is not recognized
-    }
-}
+const stringToDT = require('../../utils/database/convertion');
 
 async function updateCommand(command) {
     if (!mySchemaClient.isAlive) {
@@ -25,7 +13,7 @@ async function updateCommand(command) {
 
     // Check for format:
     if (parts.length < 3) {
-        return "Invalid format.\nUSAGE: insert collection my_entry_id name1:value1 name2:value2 ...";
+        return "Invalid format.\nUSAGE: insert collection document name1:value1 name2:value2 ...";
     }
 
     const collectionName = parts[0];
@@ -65,13 +53,22 @@ async function updateCommand(command) {
         return "The count of attributes provided doesn't match the schema.";
     }
 
+    // The idea is to assume input types to be similar to the schema if the type in the schema is
+    // boolean for example and the input was 1 then 1 can be indeed boolean thus you can accept it
+    // Otherwise print out error and say value doesn' match type.
     for (let i = 0; i < schemaTypes.length; i++) {
         if (schemaKeys[i] !== inputKeys[i]) {
             return `Field at ${inputKeys[i]} doesn't match the schema`;
         }
-        // if (stringToDataType(schemaTypes[i]) !== typeof inputKeys[i]) {
-        //     return `Type at ${inputKeys[i]} doesn't match the schema.`;
-        // }
+        if (schemaTypes[i] === "bool") {
+            if (inputValues[i] !== "0" && inputValues[i] !== "1")
+                return `The type of the value of name ${inputKeys[i]} is not a ${schemaTypes[i]}`;
+        }
+        else if (schemaTypes[i] === "int") {
+            const numberValue = parseFloat(inputValues[i]);
+            if (isNaN(numberValue))
+                return `The type of the value of name ${inputKeys[i]} is not an ${schemaTypes[i]}`;
+        }
     }
 
     // Update in db:
