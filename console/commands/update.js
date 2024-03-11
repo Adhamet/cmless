@@ -53,9 +53,6 @@ async function updateCommand(command) {
         return "The count of attributes provided doesn't match the schema.";
     }
 
-    // The idea is to assume input types to be similar to the schema if the type in the schema is
-    // boolean for example and the input was 1 then 1 can be indeed boolean thus you can accept it
-    // Otherwise print out error and say value doesn' match type.
     for (let i = 0; i < schemaTypes.length; i++) {
         if (schemaKeys[i] !== inputKeys[i]) {
             return `Field at ${inputKeys[i]} doesn't match the schema`;

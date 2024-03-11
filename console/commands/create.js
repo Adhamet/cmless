@@ -23,8 +23,6 @@ function createCommand(command) {
 
         }
 
-        // The idea here to be implemented is to convert given user types to stored types, 
-        // and if not found print out error user that such DT doesnt exist.
         const name = pair[0];
         const type = stringToDT(pair[1]);
         if(type === null) {

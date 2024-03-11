@@ -19,13 +19,13 @@ class CLI {
         this.commands = {
             // Database: creates a collection along with its schema.
             create:
-                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...\n\t\t\tTypes available: string, bool, int",
+                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...",
             // Database: Inserts a document in an existing collection according to its schema.
             insert:
-                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:type1> <name2:type2> ...",
+                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:\"value1 value1 ...\"> <name2:\"value2 value2 ...\"> ...",
             // Database: Updates a document in an existing collection according to its schema.
             update:
-                "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <my_entry_id> <name1:type1> <name2:type2> ...",
+                "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <doc> <name1:\"value1 value1 ...\"> <name2:\"value2 value2 ...\"> ...",
             // Database: Delets an existing collection.
             delColl:
                 "\t\tDeletes an existing collection.\n\t\t\tUSAGE: delColl <collection>",
@@ -133,11 +133,14 @@ class CLI {
 
     async run() {
         console.log(`
----------------------------------------------
-| Welcome to CMLess!                        |
-| Type 'help' to see available commands.    |
----------------------------------------------
-        `);
+  ┌──────────────────────────────────────────────┐
+  │                                              │
+  │   Welcome to CMLess!                         │
+  │   Type 'help' to see available commands      │
+  │                                              │
+  └──────────────────────────────────────────────┘
+`);
+
 
         process.stdout.write(await this.startAPI());
         this.setupInputHandlers(); // Set up input handlers
