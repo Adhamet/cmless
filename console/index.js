@@ -19,24 +19,24 @@ class CLI {
         this.commands = {
             // Database: creates a collection along with its schema.
             create:
-                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...",
+                "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...\n",
             // Database: Inserts a document in an existing collection according to its schema.
             insert:
-                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:\"value1 value1 ...\"> <name2:\"value2 value2 ...\"> ...",
+                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:value1> <name2:value2> ...\n\t\t\tNote: For string put in between double qoutes.\n",
             // Database: Updates a document in an existing collection according to its schema.
             update:
-                "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <doc> <name1:\"value1 value1 ...\"> <name2:\"value2 value2 ...\"> ...",
+                "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <doc> <name1:value1> <name2:value2> ...\n\t\t\tNote: For string put in between double quotes.\n",
             // Database: Delets an existing collection.
             delColl:
-                "\t\tDeletes an existing collection.\n\t\t\tUSAGE: delColl <collection>",
+                "\t\tDeletes an existing collection.\n\t\t\tUSAGE: delColl <collection>\n",
             // Database: Deletes a document in an existing collection.
             delDoc:
-                "\t\tDeletes a document through its 'id' from an existing collection.\n\t\t\tUSAGE: delDoc <collection> <my_entry_id>",
+                "\t\tDeletes a document through its 'id' from an existing collection.\n\t\t\tUSAGE: delDoc <collection> <my_entry_id>\n",
             // Database: Shows the collections in the database.
             showColls:
-                "\t\tShows the collection in the database.\n\t\t\tUSAGE: showColls",
+                "\t\tShows the collection in the database.\n\t\t\tUSAGE: showColls\n",
             showAttrs:
-                "\t\tShows an existing collection in the database's attributes.\n\t\t\tUSAGE: showAttrs <collection>",
+                "\t\tShows an existing collection in the database's attributes.\n\t\t\tUSAGE: showAttrs <collection>\n",
             // Database: Shows entries for a collection in the database.
             showDocs:
                 "\t\tShows documents for a collection in the database.\n\t\t\tUSAGE: showDocs <collection>",
