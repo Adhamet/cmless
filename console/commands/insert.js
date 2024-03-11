@@ -24,11 +24,37 @@ async function insertCommand(command) {
         return "The collection provided doesn't exist. Please provide an existing collection."
     }
 
-    // Take in types and names:
-    const namesAndValues = {};
+    const values = {};
     for (let i = 1; i < parts.length; i++) {
-        const [name, type] = parts[i].split(':');
-        namesAndValues[name] = type;
+        const pair = parts[i].split(':');
+        if (pair.length !== 2) {
+            return {
+                error: `Invalid format for pair: ${parts[i]}`
+            };
+        }
+
+        const name = pair[0];
+        let value = "";
+
+        if (pair[1].startsWith('"')) {
+            pair[1] = pair[1].slice(1);
+            value += pair[1];
+            for(let j = i+1; j < parts.length; j++) {
+                if(parts[j].endsWith('"')) {
+                    parts[j] = parts[j].slice(0,-1);
+                    value += ' ' + parts[j];
+                    i++;
+                    break;
+                }
+                value += ' ' + parts[j];
+                i++;
+            }
+        }
+        else {
+            value = pair[1];
+        }
+
+        values[name] = value;
     }
 
     // Compare types and names with schema respectively:
@@ -38,14 +64,14 @@ async function insertCommand(command) {
 
     const collectionSchema = schema[collectionName];
 
-    if (Object.keys(namesAndValues).length !== Object.keys(collectionSchema).length) {
+    if (Object.keys(values).length !== Object.keys(collectionSchema).length) {
         return "The count of attributes provided doesn't match the schema.";
     }
 
     const schemaKeys = Object.keys(collectionSchema);
     const schemaTypes = Object.values(collectionSchema);
-    const inputKeys = Object.keys(namesAndValues);
-    const inputValues = Object.values(namesAndValues);
+    const inputKeys = Object.keys(values);
+    const inputValues = Object.values(values);
 
     if (schemaTypes.length !== inputValues.length) {
         return "The count of attributes provided doesn't match the schema.";
@@ -67,7 +93,7 @@ async function insertCommand(command) {
     }
 
     // Insert in db:
-    mySchemaClient.insertDocument(collectionName, namesAndValues);
+    mySchemaClient.insertDocument(collectionName, values);
 }
 
 module.exports = insertCommand

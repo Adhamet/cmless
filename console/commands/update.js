@@ -31,10 +31,37 @@ async function updateCommand(command) {
     }
 
     // Take in types and names:
-    const namesAndValues = {};
-    for (let i = 2; i < parts.length; i++) {
-        const [name, value] = parts[i].split(':');
-        namesAndValues[name] = value;
+    const values = {};
+    for (let i = 1; i < parts.length; i++) {
+        const pair = parts[i].split(':');
+        if (pair.length !== 2) {
+            return {
+                error: `Invalid format for pair: ${parts[i]}`
+            };
+        }
+
+        const name = pair[0];
+        let value = "";
+
+        if (pair[1].startsWith('"')) {
+            pair[1] = pair[1].slice(1);
+            value += pair[1];
+            for(let j = i+1; j < parts.length; j++) {
+                if(parts[j].endsWith('"')) {
+                    parts[j] = parts[j].slice(0,-1);
+                    value += ' ' + parts[j];
+                    i++;
+                    break;
+                }
+                value += ' ' + parts[j];
+                i++;
+            }
+        }
+        else {
+            value = pair[1];
+        }
+
+        values[name] = value;
     }
 
     // Compare types and names with schema respectively:
@@ -46,8 +73,8 @@ async function updateCommand(command) {
 
     const schemaKeys = Object.keys(collectionSchema);
     const schemaTypes = Object.values(collectionSchema);
-    const inputKeys = Object.keys(namesAndValues);
-    const inputTypes = Object.values(namesAndValues);
+    const inputKeys = Object.keys(values);
+    const inputTypes = Object.values(values);
 
     if (schemaTypes.length !== inputTypes.length) {
         return "The count of attributes provided doesn't match the schema.";
@@ -69,7 +96,7 @@ async function updateCommand(command) {
     }
 
     // Update in db:
-    const result = await mySchemaClient.updateDocument(collectionName, ObjectId(id), namesAndValues);
+    const result = await mySchemaClient.updateDocument(collectionName, ObjectId(id), values);
     if (result.modifiedCount === 1) {
         return `Document with _id ${id} updated successfully in ${collectionName} collection.`;
     } else {
