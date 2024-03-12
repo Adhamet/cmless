@@ -1,11 +1,12 @@
 const { MongoClient } = require('mongodb');
 const { ObjectId } = require('mongodb');
+const databaseConfig = require('../../config/database');
 
 
 class dbClient {
     constructor() {
-      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless_user";
-      this.password = process.env.MONGO_INITDB_ROOT_PASSWORD || "cmless_pass";
+      this.username = databaseConfig.user;
+      this.password = databaseConfig.password;
       this.dbName = "cmless";
       this.client = new MongoClient(`'mongodb://${this.username}:${this.password}@localhost:27017'`, {
         useNewUrlParser: true,
