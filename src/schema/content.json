@@ -18,5 +18,9 @@
     "name": "string",
     "age": "int",
     "worker": "bool"
+  },
+  "article": {
+    "title": "string",
+    "content": "string"
   }
 }

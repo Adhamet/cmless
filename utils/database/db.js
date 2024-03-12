@@ -1,8 +1,10 @@
-const { MongoClient, ObjectID } = require('mongodb');
+const { MongoClient } = require('mongodb');
+const { ObjectId } = require('mongodb');
+
 
 class dbClient {
     constructor() {
-      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless";
+      this.username = process.env.MONGO_INITDB_ROOT_USERNAME || "cmless_user";
       this.password = process.env.MONGO_INITDB_ROOT_PASSWORD || "cmless_pass";
       this.dbName = "cmless";
       this.client = new MongoClient(`'mongodb://${this.username}:${this.password}@localhost:27017'`, {
@@ -71,15 +73,19 @@ class dbClient {
         return !!this.db;
     }
 
-    async createCollection(articleName) {
+    async createCollection(collectionName) {
       if(!this.db) {
         console.error('Not connected to the database');
         return;
       }
 
-      const existingCollection = await this.db.listCollections({ name: articleName }).toArray();
+      const existingCollection = await this.db.listCollections({ name: collectionName }).toArray();
       if (existingCollection.length == 0) {
-        return await this.db.createCollection(articleName);
+        const status = await this.db.createCollection(collectionName);
+        return { status: "okay" };
+      }
+      else {
+        return { status: "Already exists" }
       }
     }
 
@@ -98,7 +104,7 @@ class dbClient {
           return;
       }
 
-      return await this.db.collection(collectionName).updateOne({ _id: objectId }, { $set: updateData });
+      return await this.db.collection(collectionName).updateOne({ _id: ObjectId(objectId) }, { $set: updateData });
     }
 
     async deleteCollection(collectionName) {
@@ -121,7 +127,7 @@ class dbClient {
         return;
       }
 
-      return await this.db.collection(collectionName).deleteOne({ _id: objectId });
+      return await this.db.collection(collectionName).deleteOne({ _id: ObjectId(objectId) });
     }
 
     async showCollections() {

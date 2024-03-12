@@ -8,6 +8,7 @@ async function setupAPIRoutes() {
   await mySchemaClient.setupDatabase();
   try {
     for (const collectionName in schema) {
+      // Show Documents
       router.get(`/${collectionName}`, async (req, res) => {
         try {
           const documents = await db.showDocuments(collectionName);
@@ -17,40 +18,75 @@ async function setupAPIRoutes() {
         }
       });
 
+      // Insert Document
       router.post(`/${collectionName}`, async (req, res) => {
         try {
-          const insertedId = await db.insertDocument(collectionName, req.body);
-          res.json({ insertedId });
+          const query = req.query;
+          const op = await db.insertDocument(collectionName, query);
+          res.json({ insertedId: op.insertedId });
         } catch (error) {
-          res.status(500).json({ error: 'Internal server error' });
+          res.status(500).json({ error: `Internal server error. ${error}` });
         }
       });
 
+      // Update Document
       router.put(`/${collectionName}/:id`, async (req, res) => {
         try {
-          const filter = { _id: req.params.id }; // Assuming documents have _id field
-          const update = req.body;
-          const modifiedCount = await db.updateDocument(collectionName, filter, update);
+          const update = req.query;
+          const modifiedCount = await db.updateDocument(collectionName, req.params.id, update);
           res.json({ modifiedCount });
         } catch (error) {
-          res.status(500).json({ error: 'Internal server error' });
+          res.status(500).json({ error: `Internal server error. ${error}` });
         }
       });
 
+      // Delete Document
       router.delete(`/${collectionName}/:id`, async (req, res) => {
         try {
-          const filter = { _id: req.params.id }; // Assuming documents have _id field
-          const deletedCount = await db.deleteDocument(collectionName, filter);
+          const deletedCount = await db.deleteDocument(collectionName, req.params.id);
           res.json({ deletedCount });
         } catch (error) {
-          res.status(500).json({ error: 'Internal server error' });
+          res.status(500).json({ error: `Internal server error. ${error}` });
+        }
+      });
+
+      // Delete Collection
+      router.delete(`/${collectionName}`, async (req, res) => {
+        try {
+          const result = await db.deleteCollection(collectionName);
+          res.json({ result });
+        } catch (error) {
+          res.status(500).json({ error: `Internal server error. ${error}` });
+        }
+      });
+
+      // Show Collections
+      router.get('/', async (req, res) => {
+        try {
+          const collections = await db.showCollections();
+          res.json(collections);
+        } catch (error) {
+          res.status(500).json({ error: `Internal server error. ${error}` });
         }
       });
     }
   } catch (error) {
     console.error('Error setting up API routes:', error);
   }
+
+  // Create Collection
+  router.post('/', async (req, res) => {
+    try {
+      const collectionName = req.query.name;
+      const result = await db.createCollection(collectionName);
+      res.json({ result });
+    } catch (error) {
+      res.status(500).json({ error: `Internal server error. ${error}` });
+    }
+  });
 }
+
+
 
 setupAPIRoutes();
 
