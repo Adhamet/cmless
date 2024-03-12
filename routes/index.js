@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const schema = require('../schema/content.json');
-const db = require('../../utils/database/db');
-const mySchemaClient = require('../../utils/database/db');
+const schema = require('../src/schema/content.json');
+const db = require('../utils/database/db');
 
 async function setupAPIRoutes() {
-  await mySchemaClient.setupDatabase();
+  await db.setupDatabase();
   try {
     for (const collectionName in schema) {
       // Show Documents
