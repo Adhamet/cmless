@@ -10,7 +10,7 @@ function createCommand(command) {
     const parts = command.split(/\s+/);
 
     if (parts.length < 2) {
-        return "Invalid format.\nUSAGE: create collection name1:type1 name2:type2 ..."
+        return "Invalid format.\nUSAGE: create <collection> <name1:type1> <name2:type2> ..."
     }
 
     const articleName = parts[0];
@@ -19,7 +19,7 @@ function createCommand(command) {
     for (let i = 1; i < parts.length; i++) {
         const pair = parts[i].split(':');
         if (pair.length !== 2) {
-            return "Invalid format.\nUSAGE: create collection name1:type1 name2:type2 ..."
+            return "Invalid format.\nUSAGE: create <collection> <name1:type1> <name2:type2> ..."
 
         }
 

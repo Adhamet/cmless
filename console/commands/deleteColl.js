@@ -8,7 +8,7 @@ async function deleteCollCommand(command) {
     const parts = command.split(/\s+/);
 
     if (parts.length != 1) {
-        return "Invalid format.\nUSAGE: delete collection"
+        return "Invalid format.\nUSAGE: delColl <collection>\n"
     }
 
     const collectionName = parts[0];

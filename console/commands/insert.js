@@ -12,7 +12,7 @@ async function insertCommand(command) {
 
     // Check for format:
     if (parts.length < 2) {
-        return "Invalid format.\nUSAGE: insert collection name1:value1 name2:value2 ...";
+        return "Invalid format.\nUSAGE: insert <collection> <name1:value1> <name2:value2> ...";
     }
 
     const collectionName = parts[0];

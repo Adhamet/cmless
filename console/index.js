@@ -22,7 +22,7 @@ class CLI {
                 "\t\tCreates an collection with abstract attributes or edit attributes.\n\t\t\tUSAGE: create <collection> <name1:type1> <name2:type2> ...\n",
             // Database: Inserts a document in an existing collection according to its schema.
             insert:
-                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:value1> <name2:value2> ...\n\t\t\tNote: For string put in between double qoutes.\n",
+                "\t\tInserts a document in an existing collection.\n\t\t\tUSAGE: insert <collection> <name1:value1> <name2:value2> ...\n\t\t\tNote: For string put in between double quotes.\n",
             // Database: Updates a document in an existing collection according to its schema.
             update:
                 "\t\tUpdates a document through its 'id' in an existing collection.\n\t\t\tUSAGE: update <collection> <doc> <name1:value1> <name2:value2> ...\n\t\t\tNote: For string put in between double quotes.\n",

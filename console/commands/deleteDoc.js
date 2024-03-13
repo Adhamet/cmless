@@ -9,7 +9,7 @@ async function deleteDocCommand(command) {
     const parts = command.split(/\s+/);
 
     if (parts.length < 2) {
-        return "Invalid format.\nUSAGE: delete collection my_entry_id"
+        return "Invalid format.\nUSAGE: delDoc <collection> <my_entry_id>"
     }
 
     const collectionName = parts[0];
