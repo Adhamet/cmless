@@ -2,72 +2,119 @@
 <html>
 
 <head>
-	<title>Hello</title>
-	<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+    <title>Hello</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
 </head>
 
 <body>
-	<div class="page">
-		<header class="navbar navbar-expand-sm navbar-light d-print-none">
-			<div class="container-xl">
-				<h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-					<a href="#">
-						<img src="..." width="110" height="32" alt="Tabler" class="navbar-brand-image" />
-					</a>
-				</h1>
-
-				<div class="navbar-nav flex-row order-md-last">
-					<div class="nav-item">
-						<a href="#" class="nav-link d-flex lh-1 text-reset p-0">
-							<span class="avatar avatar-sm" style="background-image: url(...)"></span>
-							<div class="d-none d-xl-block ps-2">
-								<div>Paweł Kuna</div>
-								<div class="mt-1 small text-secondary">UI Designer</div>
-								<div class="dropdown">
-									<a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Open dropdown</a>
-									<div class="dropdown-menu">
-										<a class="dropdown-item" href="#">Action</a>
-										<a class="dropdown-item" href="#">Another action</a>
-										<a class="dropdown-item" href="#">Third action</a>
-									</div>
-								</div>
-
-							</div>
-						</a>
+	<style>
+		.navbar-brand {
+			margin-bottom: -10px; /* Adjust the margin bottom as needed */
+		}
+	
+		.navbar-nav {
+			margin-top: -10px; /* Adjust the margin top as needed */
+		}
+	</style>
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <!-- Modified anchor tag to link to homepage -->
+                    <a href="#" onclick="showContent('verticalLayout')">
+                        <img src="../public/img/cmless_logo.png" style="width: 210px; height: 80px;" alt="CMLess" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showContent('content')">
+                                <span class="nav-link-title">
+                                    Content
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showContent('contentTypes')">
+                                <span class="nav-link-title">
+                                    Content Types
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showContent('settings')">
+                                <span class="nav-link-title">
+                                    Settings
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <div class="page-wrapper">
+			<br>
+            <div id="verticalLayout">
+                <!-- Vertical Layout homepage content -->
+                <h3 style="text-align: center;">This is our project.</h3>
+				<p style="text-align: center; font-size: 36px; font-weight: bold;">Welcome to CMLess!</p>
+				<div class="hr-text text-primary">CREATORS</div>
+				<div id="creators" style="text-align: center;">
+					<div style="margin-top: 20px;">
+						<div style="display: inline-block; margin-right: 50px;">
+							<img src="../public/img/creator_Ahmed.jpeg" style="width: 200px; height: auto;" alt="Engineer 1">
+							<p style="margin-top: 10px;"><b>Ahmed Saed</b></p>
+							<p><b>Software Engineer</b></p>
+						</div>
+						<div style="display: inline-block;">
+							<img src="../public/img/creator_Adham.jpeg" style="width: 200px; height: 200px;" alt="Engineer 2">
+							<p style="margin-top: 10px;"><b>Adham Essam</b></p>
+							<p><b>Software Engineer</b></p>
+						</div>
 					</div>
 				</div>
-			</div>
-		</header>
-		<div class="page-wrapper">
-			<div class="page-body">
-				<div class="container-xl">
-					<div class="row row-deck row-cards">
-						<div class="col-4">
-							<div class="card">
-								<div class="card-body" style="height: 10rem"></div>
-							</div>
-						</div>
-						<div class="col-4">
-							<div class="card">
-								<div class="card-body" style="height: 10rem"></div>
-							</div>
-						</div>
-						<div class="col-4">
-							<div class="card">
-								<div class="card-body" style="height: 10rem"></div>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="card">
-								<div class="card-body" style="height: 10rem"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+				<div class="hr-text text-primary">ABOUT</div>
+				<p style="text-align: center; font-size: 17px; font-weight: bold; max-width: 600px; margin: 0 auto;">CMLess is a content management system (CMS), 
+					a software that helps users create, manage, and modify content on a website without the need for technical knowledge.
+					We allow developers to have a powerful base for building their CMS, offering them flexibility and ease of customization. 
+				</p>
+            </div>
+            <div id="content" style="display: none;">
+                <!-- Content layout -->
+                <h3 style="text-align: center;">Content page.</h3>
+            </div>
+            <div id="contentTypes" style="display: none;">
+                <!-- Content Types layout -->
+				<h3 style="text-align: center;">Contet Types page.</h3>
+            </div>
+            <div id="settings" style="display: none;">
+                <!-- Settings layout -->
+				<h3 style="text-align: center;">Settings page.</h3>
+            </div>
+        </div>
+    </div>
+	<script>
+		function showContent(id) {
+			// Hide all content sections
+			var contentSections = document.querySelectorAll('.page-wrapper > div[id]');
+			contentSections.forEach(function(section) {
+				section.style.display = 'none';
+			});
+	
+			// Show the selected content section
+			var selectedSection = document.getElementById(id);
+			if (selectedSection) {
+				selectedSection.style.display = 'block';
+				document.getElementById('page-title').innerText = selectedSection.querySelector('h3').innerText;
+			}
+		}
+	</script>
+	
 </body>
 
 </html>
